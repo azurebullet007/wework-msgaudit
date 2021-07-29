@@ -25,7 +25,8 @@ public class Start {
         System.out.println("===============init===============");
 
         //创建企业表
-        createCorpListTable();
+        if(validateTableNameExist("'corplist'")!=true){
+        createCorpListTable();}
 
         List<Map<String, Object>> list = jdbcTemplate.queryForList("SELECT * FROM corplist where status=1");
 
@@ -59,6 +60,17 @@ public class Start {
      *
      * @author 读心印 <aa24615@qq.com>
      */
+    public static boolean validateTableNameExist(String tableName) {
+        JdbcTemplate jdbcTemplate = new JdbcTemplate(DataSource.init());
+        String sql = "select count(*) from information_schema.tables where table_name =" +tableName;
+        int tableNum = jdbcTemplate.queryForObject(sql,Integer.class);
+        if (tableNum > 0) {
+            return true;
+        }else {
+            return false;
+        }
+    }
+
     private static void createCorpListTable(){
 
         JdbcTemplate jdbcTemplate = new JdbcTemplate(DataSource.init());
