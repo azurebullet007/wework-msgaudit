@@ -86,7 +86,7 @@ public class Message {
         return  0;
     }
     //获取列表
-    public void getList(){
+    public void getList(int versionnumber){
 
 
         System.out.println("======================================");
@@ -107,26 +107,29 @@ public class Message {
 
             String errmsg = jo.getString("errmsg");
             int errcode = jo.getInt("errcode");
-
-//            System.out.println("原始:"+json);
+            //System.out.println("原始:"+json);
 
             if(errcode==0){
                 System.out.println("获取成功:"+errmsg);
                 JSONArray chatdata = jo.getJSONArray("chatdata");
+                //System.out.println("过滤:"+json);
                 System.out.println("消息数:"+chatdata.length());
                 for (int i = 0; i < chatdata.length(); i++) {
+
                     String item = chatdata.get(i).toString();
                     JSONObject data = new JSONObject(item);
-                    String encrypt_random_key = data.getString("encrypt_random_key");
-                    String encrypt_chat_msg = data.getString("encrypt_chat_msg");
-                    long seq = data.getLong("seq");
-//                    System.out.println("密钥:"+encrypt_random_key);
-//                    System.out.println("密文:"+encrypt_chat_msg);
-                    String message = this.decryptData(encrypt_random_key,encrypt_chat_msg);
-                    System.out.println("消息内容:"+message);
-                    if(this.saveMessage(seq,message)){
-                        if(this.seqs<seq){
-                            this.seqs=seq;
+                    if (data.getInt("publickey_ver") == versionnumber) {
+                        String encrypt_random_key = data.getString("encrypt_random_key");
+                        String encrypt_chat_msg = data.getString("encrypt_chat_msg");
+                        long seq = data.getLong("seq");
+                        System.out.println("密钥:" + encrypt_random_key);
+                        System.out.println("密文:" + encrypt_chat_msg);
+                        String message = this.decryptData(encrypt_random_key, encrypt_chat_msg);
+                        System.out.println("消息内容:" + message);
+                        if (this.saveMessage(seq, message)) {
+                            if (this.seqs < seq) {
+                                this.seqs = seq;
+                            }
                         }
                     }
                 }
@@ -140,7 +143,7 @@ public class Message {
             Finance.FreeSlice(slice);
 
             Thread.sleep(10000);
-            this.getList();
+            this.getList(2);
         }catch (InterruptedException e){
             System.out.println("异常:"+this.corpid);
             return;
