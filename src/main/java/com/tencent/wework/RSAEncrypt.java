@@ -93,9 +93,11 @@ public class RSAEncrypt {
      */
     public static String decrypt(String str, String privateKey) throws Exception{
         //64位解码加密后的字符串
+        System.out.println(privateKey);
         byte[] inputByte = Base64.decodeBase64(str.getBytes("UTF-8"));
         //base64编码的私钥
         byte[] decoded = Base64.decodeBase64(privateKey);
+        System.out.println(decoded);
         RSAPrivateKey priKey = (RSAPrivateKey) KeyFactory.getInstance("RSA").generatePrivate(new PKCS8EncodedKeySpec(decoded));
         //RSA解密
         Cipher cipher = Cipher.getInstance("RSA");

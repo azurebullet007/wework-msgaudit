@@ -90,6 +90,7 @@ public class Message {
 
 
         System.out.println("======================================");
+        System.out.println(versionnumber);
         try {
 
             long seqs = this.getSeq();
@@ -143,7 +144,7 @@ public class Message {
             Finance.FreeSlice(slice);
 
             Thread.sleep(10000);
-            this.getList(2);
+            this.getList(4);
         }catch (InterruptedException e){
             System.out.println("异常:"+this.corpid);
             return;

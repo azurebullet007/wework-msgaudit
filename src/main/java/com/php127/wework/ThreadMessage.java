@@ -25,7 +25,7 @@ class ThreadMessage extends Thread {
         System.out.println("开始运行: " +  corpid );
         try {
             Message message = new Message(this.corpid,this.secret,this.prikey);
-            message.getList(2);
+            message.getList(4);
         }catch (Exception e) {
             System.out.println("异常线程: " +  corpid );
             System.out.println(e.getMessage());
